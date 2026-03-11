@@ -11,12 +11,7 @@ async function Inserir(name, email, password){
   return user; 
 }
 
-// async function AddUser(name, email, fone, logr, num, compl, bairro, cidade, uf){  
-//   // Aqui é gerado o hash para a criptografia da senha
-//   const user = await repositoryUsers.AddUser(name, email, fone, logr, num, compl, bairro, cidade, uf);
-//   user.token = jwt.CreateToken(user.id_user);
-//   return user; 
-// }
+// Método AddUser
 async function AddUser(
   name,
   email,
@@ -65,36 +60,25 @@ async function ListarUser(id_user){
   return user; 
 }
 
-// Método Login
+// Método Login// Método Login
 async function Login(email, password){
   const user = await repositoryUsers.ListarByEmail(email);
-  // Se o email não existir, retorna null
-  if(user.length == 0) 
-    return []
-  else {
-    // Se a senha conferir com o hash criptografado, retorna o usuário
-    if (await bcrypt.compare(password, user.password)){
-      delete user.password;
-
-      user.token = jwt.CreateToken(user.id_user);
-
-      return user;
-    }else
-      return [];  // Senha não confere, retorna null
+  
+  // Se o email não existir, retorna array vazio
+  if(!user || Array.isArray(user) && user.length == 0) 
+    return [];
+  
+  // Se a senha conferir com o hash criptografado, retorna o usuário
+  if (await bcrypt.compare(password, user.password)){
+    delete user.password;
+    user.token = jwt.CreateToken(user.id_user);
+    return user;
+  } else {
+    return []; // Senha não confere
   }
-  return user; 
 }
 
 // Método InserirAdmin
-// async function InserirAdmin(name, email, password){  
-//   // Aqui é gerado o hash para a criptografia da senha
-//   const hashedPassword = await bcrypt.hash(password, 10);
-//   const admin = await repositoryUsers.InserirAdmin(name, email, hashedPassword);
-
-//   admin.token = jwt.CreateToken(admin.id_user);
-  
-//   return admin; 
-// }
 async function InserirAdmin(name, email, password) {
   const hashedPassword = await bcrypt.hash(password, 10);
   const admin = await repositoryUsers.InserirAdmin(name, email, hashedPassword);
