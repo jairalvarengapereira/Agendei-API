@@ -9,10 +9,34 @@ async function Inserir(name, email, hashedPassword){
 }
 
 // Método AddUser (POST)
-async function AddUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf){
-  let sql = `insert into users (name, email, fone, cep, logr, num, compl, bairro, cidade, uf) 
-                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id_user`;
-  const user = await query(sql, [name, email, fone, cep, logr, num, compl, bairro, cidade, uf]);
+async function AddUser(
+  name,
+  email,
+  password,
+  fone,
+  cep,
+  logr,
+  num,
+  compl,
+  bairro,
+  cidade,
+  uf
+) {
+  let sql = `insert into users (name, email, password, fone, cep, logr, num, compl, bairro, cidade, uf) 
+                        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning id_user`;
+  const user = await query(sql, [
+    name,
+    email,
+    password,
+    fone,
+    cep,
+    logr,
+    num,
+    compl,
+    bairro,
+    cidade,
+    uf,
+  ]);
   return user[0];
 }
 

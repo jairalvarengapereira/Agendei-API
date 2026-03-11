@@ -1,9 +1,33 @@
 import serviceUser from "../services/service.user.js";
 
 // Método Inserir
-async function AddUser(req, res){
-  const {name, email, fone, cep, logr, num, compl, bairro, cidade, uf } = req.body;
-  const user = await serviceUser.AddUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf);
+async function AddUser(req, res) {
+  const {
+    name,
+    email,
+    password,
+    fone,
+    cep,
+    logr,
+    num,
+    compl,
+    bairro,
+    cidade,
+    uf,
+  } = req.body;
+  const user = await serviceUser.AddUser(
+    name,
+    email,
+    password,
+    fone,
+    cep,
+    logr,
+    num,
+    compl,
+    bairro,
+    cidade,
+    uf
+  );
   res.status(201).json(user);
 }
 

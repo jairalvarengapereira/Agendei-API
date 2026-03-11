@@ -15,6 +15,7 @@ async function Inserir(name, email, password){
 async function AddUser(
   name,
   email,
+  password,
   fone,
   cep,
   logr,
@@ -24,9 +25,11 @@ async function AddUser(
   cidade,
   uf
 ) {
+  const hashedPassword = await bcrypt.hash(password, 10);
   const user = await repositoryUsers.AddUser(
     name,
     email,
+    hashedPassword,
     fone,
     cep,
     logr,
@@ -39,8 +42,6 @@ async function AddUser(
   user.token = jwt.CreateToken(user.id_user);
   return user;
 }
-
-AddUser
 
 // Método Editar User
 async function EditUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf, id_user){
