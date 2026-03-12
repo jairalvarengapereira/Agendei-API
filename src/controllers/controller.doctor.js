@@ -38,10 +38,21 @@ async function Editar(req, res){
 }
 
 // Método Excluir
-async function Excluir(req, res){
-  const id_doctor = req.params.id_doctor;
-  await serviceDoctor.Excluir(id_doctor);
-  res.status(204).send();
+async function Excluir(req, res) {
+  try {
+    const id_doctor = req.params.id_doctor;
+    await serviceDoctor.Excluir(id_doctor);
+    res.status(204).send();
+  } catch (error) {
+    if (
+      error.message.includes("foreign key") ||
+      error.message.includes("still referenced")
+    ) {
+      res.status(409).json({ error: "Médico possui serviços vinculados." });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
 
 // Médoto ListarServicos
