@@ -12,5 +12,24 @@ async function Listar() {
   }
 }
 
+// Método Inserir (POST)
+async function Inserir(description) {
+  let sql = `INSERT INTO services (description) VALUES ($1) RETURNING id_service`;
+  const service = await query(sql, [description]);
+  return service[0];
+}
+
+// Método Editar (PUT)
+async function Editar(id_service, description) {
+  let sql = "UPDATE services SET description = $1 WHERE id_service = $2";
+  await query(sql, [description, id_service]);
+}
+
+// Método Excluir (DELETE)
+async function Excluir(id_service) {
+  let sql = "DELETE FROM services WHERE id_service = $1";
+  await query(sql, [id_service]);
+}
+
 // Exportando os métodos
-export default { Listar };
+export default { Listar, Inserir, Editar, Excluir };

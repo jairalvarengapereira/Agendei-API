@@ -1,43 +1,57 @@
 import serviceServices from "../services/service.services.js";
 
-// Médoto Listar
-async function Listar(req, res){
-  const description = req.query.description;
-  const services = await serviceServices.Listar(description);
-  res.status(200).json(services);
+// Método Listar
+async function Listar(req, res) {
+  try {
+    const services = await serviceServices.Listar();
+    res.status(200).json(services);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-// // Método Inserir
-// async function Inserir(req, res){
-//   // const name = req.body.name;
-//   // const specialty = req.body.specialty;
-//   // const icon = req.body.icon;
-//   const { name, specialty, icon } = req.body;
-//   const newDoctor = await serviceDoctor.Inserir(name, specialty, icon);
-//   res.status(201).json(newDoctor);
-// }
+// Método Inserir
+async function Inserir(req, res) {
+  try {
+    const { description } = req.body;
+    if (!description) {
+      return res.status(400).json({ error: "Descrição é obrigatória." });
+    }
+    const service = await serviceServices.Inserir(description);
+    res.status(201).json(service);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
-// // Método Editar
-// async function Editar(req, res){
-//   const id_doctor = req.params.id_doctor;
-//   const {name, specialty, icon} = req.body;
-//   const updatedDoctor = await serviceDoctor.Editar(id_doctor, name, specialty, icon);
-//   res.status(200).json(updatedDoctor);
-// }
+// Método Editar
+async function Editar(req, res) {
+  try {
+    const id_service = req.params.id_service;
+    const { description } = req.body;
+    if (!description) {
+      return res.status(400).json({ error: "Descrição é obrigatória." });
+    }
+    await serviceServices.Editar(id_service, description);
+    res.status(200).json({ message: "Serviço atualizado com sucesso." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
-// // Método Excluir
-// async function Excluir(req, res){
-//   const id_doctor = req.params.id_doctor;
-//   await serviceDoctor.Excluir(id_doctor);
-//   res.status(204).send();
-// }
+// Método Excluir
+async function Excluir(req, res) {
+  try {
+    const id_service = req.params.id_service;
+    await serviceServices.Excluir(id_service);
+    res.status(204).send();
+  } catch (error) {
+    if (error.message.includes('foreign key') || error.message.includes('still referenced')) {
+      res.status(409).json({ error: "Serviço não pode ser excluído pois está vinculado a médicos ou consultas." });
+    } else {
+      res.status(500).json({ error: error.message });
+    }
+  }
+}
 
-// // Médoto ListarServicos
-// async function ListarServicos(req, res){
-//   const id_doctor = req.params.id_doctor;
-//   const serv = await serviceDoctor.ListarServicos(id_doctor);
-//   res.status(200).json(serv);
-// }
-
-// Métodos relacionados ao nome do médico
-export default {Listar}//, Inserir, Editar, Excluir, ListarServicos };
+export default { Listar, Inserir, Editar, Excluir };

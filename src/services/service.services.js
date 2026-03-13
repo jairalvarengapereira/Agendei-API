@@ -1,34 +1,25 @@
 import repositoryServices from "../repositories/repository.services.js";
 
 // Método Listar
-async function Listar(description){
-  const services = await repositoryServices.Listar(description);
-  return services; 
+async function Listar() {
+  const services = await repositoryServices.Listar();
+  return services;
 }
 
-// // Método Inserir
-// async function Inserir(name, specialty, icon){
-//   const newDoctor = await repositoryDoctors.Inserir(name, specialty, icon);
-//   return newDoctor; 
-// }
+// Método Inserir
+async function Inserir(description) {
+  const service = await repositoryServices.Inserir(description);
+  return service;
+}
 
-// // Método Editar
-// async function Editar(id_doctor, name, specialty, icon){
-//   const updatedDoctor = await repositoryDoctors.Editar(id_doctor, name, specialty, icon);
-//   return updatedDoctor; 
-// }
+// Método Editar
+async function Editar(id_service, description) {
+  await repositoryServices.Editar(id_service, description);
+}
 
-// // Método Excluir
-// async function Excluir(id_doctor){
-//   await repositoryDoctors.Excluir(id_doctor);
-// }
+// Método Excluir
+async function Excluir(id_service) {
+  await repositoryServices.Excluir(id_service);
+}
 
-// // Método ListarServicos
-// async function ListarServicos(id_doctor){
-//   const serv = await repositoryDoctors.ListarServicos(id_doctor);
-//   return serv; 
-// }
-
-// Exportando os Métodos
-export default {Listar}//, Inserir, Editar, Excluir, ListarServicos};
-
+export default { Listar, Inserir, Editar, Excluir };
