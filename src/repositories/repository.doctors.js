@@ -1,3 +1,5 @@
+import { query } from "../database/postgres.js";
+
 async function Listar(name) {
   let filtro = [];
   let sql = `SELECT d.id_doctor, d.name, d.icon, s.description as specialty
