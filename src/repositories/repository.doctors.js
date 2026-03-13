@@ -1,20 +1,23 @@
-import { query } from "../database/postgres.js";
-
 async function Listar(name) {
   let filtro = [];
-  let sql = "select * from doctors ";
+  let sql = `SELECT d.id_doctor, d.name, d.icon, s.description as specialty
+             FROM doctors d
+             LEFT JOIN services s ON d.specialty = s.id_service `;
   if (name) {
-    sql += "where name ilike $1 ";
+    sql += "WHERE d.name ilike $1 ";
     filtro.push(`%${name}%`);
   }
-  sql += "order by name";
+  sql += "ORDER BY d.name";
   return await query(sql, filtro);
 }
 
 async function ListarDoctor(id_doctor) {
-  let sql = "select * from doctors where id_doctor = $1";
-  const doctor = await query(sql, [id_doctor]);
-  return doctor;
+  let sql = `SELECT d.id_doctor, d.name, d.icon, d.specialty as id_service_specialty,
+             s.description as specialty
+             FROM doctors d
+             LEFT JOIN services s ON d.specialty = s.id_service
+             WHERE d.id_doctor = $1`;
+  return await query(sql, [id_doctor]);
 }
 
 async function Inserir(name, specialty, icon, services) {
