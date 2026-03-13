@@ -1,41 +1,40 @@
 import repositoryDoctors from "../repositories/repository.doctors.js";
 
-// Método Listar
-async function Listar(name){
-  const doctors = await repositoryDoctors.Listar(name);
-  return doctors; 
+async function Listar(name) {
+  return await repositoryDoctors.Listar(name);
 }
 
-// Método Listar Doctor
-async function ListarDoctor(id_doctor){
-  const doctor = await repositoryDoctors.ListarDoctor(id_doctor);
-  return doctor; 
+async function ListarDoctor(id_doctor) {
+  return await repositoryDoctors.ListarDoctor(id_doctor);
 }
 
-// Método Inserir
-async function Inserir(name, specialty, icon){
-  // const newDoctor = await repositoryDoctors.Inserir(name, specialty, icon);
-  const newDoctor = await repositoryDoctors.Inserir(name, specialty, icon);
-  return newDoctor; 
+async function Inserir(name, specialty, icon, services) {
+  return await repositoryDoctors.Inserir(name, specialty, icon, services);
 }
 
-// Método Editar
-async function Editar(id_doctor, name, specialty, icon){
-  const updatedDoctor = await repositoryDoctors.Editar(id_doctor, name, specialty, icon);
-  return updatedDoctor; 
+async function Editar(id_doctor, name, specialty, icon, services) {
+  return await repositoryDoctors.Editar(
+    id_doctor,
+    name,
+    specialty,
+    icon,
+    services
+  );
 }
 
-// Método Excluir
-async function Excluir(id_doctor){
+async function Excluir(id_doctor) {
   await repositoryDoctors.Excluir(id_doctor);
 }
 
-// Método ListarServicos
-async function ListarServicos(id_doctor){
-  const serv = await repositoryDoctors.ListarServicos(id_doctor);
-  return serv; 
+async function ListarServicos(id_doctor) {
+  return await repositoryDoctors.ListarServicos(id_doctor);
 }
 
-// Exportando os Métodos
-export default {Listar, Inserir, Editar, Excluir, ListarServicos, ListarDoctor};
-
+export default {
+  Listar,
+  Inserir,
+  Editar,
+  Excluir,
+  ListarServicos,
+  ListarDoctor,
+};
