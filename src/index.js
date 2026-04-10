@@ -8,11 +8,7 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', '*']
-}));
+app.use(cors());
 app.use(router);
 
 const PORT = process.env.PORT || 3001;
