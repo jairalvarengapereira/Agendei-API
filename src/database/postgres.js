@@ -10,9 +10,9 @@ dotenv.config({ path: path.join(__dirname, "../../.env") });
 const { Pool } = pg;
 
 const db = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: false,
-  family: 4, // Força IPv4
+  connectionString: process.env.DATABASE_URL || "postgresql://neondb_owner:npg_BqeEs8DN7fYH@ep-sweet-cell-an547vg3-pooler.c-6.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require",
+  ssl: { rejectUnauthorized: false },
+  family: 4,
 });
 
 db.connect((err, client, release) => {
