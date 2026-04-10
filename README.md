@@ -1,66 +1,172 @@
-![image](https://github.com/user-attachments/assets/0e54413e-bf21-4e72-930a-fed07c62a8cf)
-## 📌 Estrutura das Páginas e Conexões
+# Agendei API - Backend
 
-### 1️⃣ Autenticação: login/ e register/
-Essas páginas são a porta de entrada do sistema.
-- **login/**
-  - **Login.jsx**: Página principal do login.
-  - **LoginForm.jsx**: Componente que contém o formulário de autenticação.
-  - **Conexões:**
-    - Ao fazer login, o usuário é redirecionado para a página principal (appointments/).
-    - Se não tem conta, pode navegar para register/.
-- **register/**
-  - **Register.jsx**: Tela principal do registro.
-  - **RegisterForm.jsx**: Contém o formulário de cadastro.
-  - **Conexões:**
-    - Após o cadastro, o usuário pode ser redirecionado automaticamente para login/ ou já ser autenticado e ir para appointments/.
+API RESTful do sistema de agendamento de consultas médicas Agendei.
 
-### 2️⃣ Agendamentos: appointments/ e appointment-add/
-Essas páginas permitem visualizar, criar e gerenciar agendamentos.
-- **appointments/**
-  - **AppointmentsList.jsx**: Lista de todos os agendamentos.
-  - **AppointmentDetails.jsx**: Exibe os detalhes de um agendamento específico.
-  - **Conexões:**
-    - Um clique em um item da lista leva para AppointmentDetails.jsx.
-    - O botão "Novo Agendamento" leva para appointment-add/.
-- **appointment-add/**
-  - **AppointmentAdd.jsx**: Página onde o usuário preenche um formulário para adicionar um novo agendamento.
-  - **Conexões:**
-    - Após a criação, o usuário pode ser redirecionado de volta para appointments/.
+## 📋 Descrição
 
-### 3️⃣ Médicos: doctors/ e doctors-add/
-Gerencia os médicos cadastrados no sistema.
-- **doctors/**
-  - **DoctorsList.jsx**: Exibe todos os médicos registrados.
-  - **DoctorProfile.jsx**: Mostra informações detalhadas de um médico.
-  - **Conexões:**
-    - Clicar em um médico na lista leva para DoctorProfile.jsx.
-    - O botão "Adicionar Médico" leva para doctors-add/.
-- **doctors-add/**
-  - **DoctorAdd.jsx**: Formulário para adicionar um novo médico ao sistema.
-  - **Conexões:**
-    - Após adicionar, o usuário pode ser redirecionado para doctors/.
+API Node.js/Express que gerencia médicos, serviços, usuários e agendamentos. Utiliza PostgreSQL como banco de dados e JWT para autenticação.
 
-### 4️⃣ Usuários: users/ e users-add/
-Controla os usuários do sistema (possivelmente pacientes ou administradores).
-- **users/**
-  - **UsersList.jsx**: Lista os usuários cadastrados no sistema.
-  - **UserProfile.jsx**: Exibe detalhes de um usuário específico.
-  - **Conexões:**
-    - Clicar em um usuário na lista leva para UserProfile.jsx.
-    - O botão "Adicionar Usuário" leva para users-add/.
-- **users-add/**
-  - **UserAdd.jsx**: Formulário para cadastrar um novo usuário.
-  - **Conexões:**
-    - Após cadastrar, o usuário pode ser redirecionado para users/.
+## 🚀 Tecnologias
 
-## 🔗 Fluxo Geral da Aplicação
-1. O usuário acessa login/ para autenticação.
-2. Se necessário, pode se cadastrar em register/.
-3. Após login, ele é redirecionado para appointments/ (tela inicial).
-4. A partir daí, pode:
-   - Criar um novo agendamento em appointment-add/.
-   - Acessar detalhes de um agendamento em AppointmentDetails.jsx.
-   - Gerenciar médicos em doctors/ e doctors-add/.
-   - Gerenciar usuários em users/ e users-add/.
-5. Caso precise sair, pode se deslogar e voltar para login/.
+- **Node.js** - Runtime JavaScript
+- **Express.js** - Framework web
+- **PostgreSQL** - Banco de dados relacional
+- **pg** - Cliente PostgreSQL
+- **jsonwebtoken** - Autenticação JWT
+- **bcrypt** - Criptografia de senhas
+- **dotenv** - Variáveis de ambiente
+
+## 📦 Instalação
+
+```bash
+cd agendei-API
+npm install
+npm start
+```
+
+## 🔧 Variáveis de Ambiente
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DATABASE_URL=postgresql://user:password@host/neondb?sslmode=require
+PORT=3001
+```
+
+## 🗄️ Estrutura do Banco de Dados
+
+### Tabelas
+
+#### admins
+- `id_admin` (SERIAL PRIMARY KEY)
+- `name` (VARCHAR 50)
+- `email` (VARCHAR 100)
+- `password` (VARCHAR 100)
+
+#### doctors
+- `id_doctor` (SERIAL PRIMARY KEY)
+- `name` (VARCHAR 50)
+- `specialty` (VARCHAR 50)
+- `icon` (VARCHAR 10)
+
+#### services
+- `id_service` (SERIAL PRIMARY KEY)
+- `description` (VARCHAR 50)
+
+#### users
+- `id_user` (SERIAL PRIMARY KEY)
+- `name` (VARCHAR 50)
+- `email` (VARCHAR 100)
+- `password` (VARCHAR 100)
+- `fone` (VARCHAR 20)
+- `cep`, `logr`, `num`, `compl`, `bairro`, `cidade`, `uf` (Endereço)
+
+#### doctors_services
+- `id_doctor_service` (SERIAL PRIMARY KEY)
+- `id_doctor` (INTEGER REFERENCES doctors)
+- `id_service` (INTEGER REFERENCES services)
+- `price` (NUMERIC 9,2)
+
+#### appointments
+- `id_appointment` (SERIAL PRIMARY KEY)
+- `id_doctor` (INTEGER REFERENCES doctors)
+- `id_service` (INTEGER REFERENCES services)
+- `id_user` (INTEGER REFERENCES users)
+- `booking_date` (DATE)
+- `booking_hour` (VARCHAR 5)
+
+## 📡 Endpoints
+
+### Autenticação Admin
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | /admin/login | Login de administrador |
+| POST | /admin/register | Registro de administrador |
+
+### Autenticação Usuário
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | /users/login | Login de usuário |
+| POST | /users | Registro de usuário |
+
+### Médicos (requer token)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | /doctors | Listar médicos |
+| GET | /doctors/:id_doctor | Detalhes do médico |
+| POST | /doctors | Cadastrar médico |
+| PUT | /doctors/:id_doctor | Atualizar médico |
+| DELETE | /doctors/:id_doctor | Excluir médico |
+| GET | /doctors/:id_doctor/services | Serviços do médico |
+
+### Serviços
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | /services | Listar serviços (público) |
+| POST | /services | Cadastrar serviço (token) |
+| PUT | /services/:id_service | Atualizar serviço |
+| DELETE | /services/:id_service | Excluir serviço |
+
+### Agendamentos (requer token)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | /appointments | Listar agendamentos do usuário |
+| POST | /appointments | Criar agendamento |
+| DELETE | /appointments/:id_appointment | Cancelar |
+
+### Admin (requer token)
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| GET | /admin/appointments | Todos os agendamentos |
+| GET | /admin/users | Listar usuários |
+| GET | /admin/appointments/:id | Detalhes |
+| POST | /admin/appointments | Criar (admin) |
+| PUT | /admin/appointments/:id | Editar (admin) |
+| PUT | /admin/profile/:id_admin | Editar perfil admin |
+
+## 🔐 Autenticação
+
+A API usa JWT para autenticação. O token deve ser enviado no header:
+```
+Authorization: Bearer <token>
+```
+
+## 📁 Estrutura de Arquivos
+
+```
+agendei-API/
+├── src/
+│   ├── index.js           # Entry point
+│   ├── routes.js          # Rotas da API
+│   ├── token.js           # Funções JWT
+│   ├── database/
+│   │   └── postgres.js    # Conexão PostgreSQL
+│   ├── controllers/       # Controladores
+│   ├── services/         # Lógica de negócio
+│   └── repositories/      # Acesso ao banco
+├── package.json
+└── vercel.json
+```
+
+## 🌐 Links de Produção
+
+- **API**: https://agendei-api-53h2.onrender.com
+- **Frontend**: https://agendeiweb.netlify.app
+
+## 📝 Scripts
+
+```bash
+npm start    # Iniciar servidor
+```
+
+## 📄 Licença
+
+MIT
+
+## 👤 Autor
+
+Jair Alvarenga Pereira
+
+## 🔗 Repositório
+
+https://github.com/jairalvarengapereira/Agendei-API
