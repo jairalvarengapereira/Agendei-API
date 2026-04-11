@@ -9,6 +9,16 @@ async function Listar(req, res) {
   }
 }
 
+async function ListarDoctorsByService(req, res) {
+  try {
+    const id_service = req.params.id_service;
+    const doctors = await serviceServices.ListarDoctorsByService(id_service);
+    res.status(200).json(doctors);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
+
 async function Inserir(req, res) {
   try {
     const { description } = req.body;
@@ -56,4 +66,4 @@ async function Excluir(req, res) {
   }
 }
 
-export default { Listar, Inserir, Editar, Excluir };
+export default { Listar, ListarDoctorsByService, Inserir, Editar, Excluir };

@@ -6,6 +6,16 @@ async function Listar() {
   return services;
 }
 
+async function ListarDoctorsByService(id_service) {
+  let sql = `SELECT d.id_doctor, d.name, d.specialty, d.icon
+             FROM doctors d
+             JOIN doctors_services ds ON d.id_doctor = ds.id_doctor
+             WHERE ds.id_service = $1
+             ORDER BY d.name`;
+  const doctors = await query(sql, [id_service]);
+  return doctors;
+}
+
 async function Inserir(description) {
   let sql = `INSERT INTO services (description) VALUES ($1) RETURNING id_service`;
   const service = await query(sql, [description]);
@@ -22,4 +32,4 @@ async function Excluir(id_service) {
   await query(sql, [id_service]);
 }
 
-export default { Listar, Inserir, Editar, Excluir };
+export default { Listar, ListarDoctorsByService, Inserir, Editar, Excluir };

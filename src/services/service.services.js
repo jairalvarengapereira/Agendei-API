@@ -4,6 +4,10 @@ async function Listar() {
   return await repositoryServices.Listar();
 }
 
+async function ListarDoctorsByService(id_service) {
+  return await repositoryServices.ListarDoctorsByService(id_service);
+}
+
 async function Inserir(description) {
   return await repositoryServices.Inserir(description);
 }
@@ -16,4 +20,4 @@ async function Excluir(id_service) {
   await repositoryServices.Excluir(id_service);
 }
 
-export default { Listar, Inserir, Editar, Excluir };
+export default { Listar, ListarDoctorsByService, Inserir, Editar, Excluir };

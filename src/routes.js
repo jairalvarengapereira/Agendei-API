@@ -33,6 +33,7 @@ router.put("/users/:id_user", jwt.ValidateToken, controllerUser.EditUser);
 
 // Services
 router.get("/services", controllerServices.Listar);
+router.get("/services/:id_service/doctors", controllerServices.ListarDoctorsByService);
 router.post("/services", jwt.ValidateToken, controllerServices.Inserir);
 router.put(
   "/services/:id_service",
