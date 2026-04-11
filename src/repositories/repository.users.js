@@ -85,7 +85,7 @@ async function ListarByEmailAdmin(email){
 
 // Método Profile
 async function Profile(id_user){
-  let sql = "select id_user, name, email from users where id_user = $1 ";
+  let sql = "select id_user, name, email, fone, cep, logr, num, compl, bairro, cidade, uf from users where id_user = $1 ";
   const user = await query(sql, [id_user]);
   return user[0];
 }
