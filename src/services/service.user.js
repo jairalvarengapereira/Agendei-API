@@ -44,8 +44,8 @@ async function AddUser(
 }
 
 // Método Editar User
-async function EditUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf, id_user){
-  const updatedUser = await repositoryUsers.EditUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf, id_user);
+async function EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user){
+  const updatedUser = await repositoryUsers.EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user);
   return updatedUser; 
 }
 

@@ -41,8 +41,8 @@ async function ListarUser(req, res){
 // Metodo Editar User
 async function EditUser(req, res){
   const id_user = req.params.id_user;
-  const {name, email, fone, cep, logr, num, compl, bairro, cidade, uf} = req.body;
-  const updatedUser = await serviceUser.EditUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf, id_user);
+  const {name, fone, cep, logr, num, compl, bairro, cidade, uf} = req.body;
+  const updatedUser = await serviceUser.EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user);
   res.status(200).json(updatedUser);
 }
 
