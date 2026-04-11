@@ -49,6 +49,22 @@ async function EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, i
   return updatedUser; 
 }
 
+// Método Alterar Senha
+async function ChangePassword(id_user, currentPassword, newPassword) {
+  const user = await repositoryUsers.ListarUser(id_user);
+  if (!user) {
+    throw new Error("Usuário não encontrado");
+  }
+  
+  const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!passwordMatch) {
+    throw new Error("Senha atual incorreta");
+  }
+  
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await repositoryUsers.UpdatePassword(id_user, hashedPassword);
+}
+
 // Método Listar Users
 async function Listar(){
   const users = await repositoryUsers.Listar();
@@ -132,5 +148,5 @@ async function DelUser(id_user){
 
 
 // Exportando os Métodos
-export default { AddUser, DelUser, Inserir, Login, Profile, LoginAdmin, InserirAdmin, Listar, ListarUser, EditUser, EditarAdmin };
+export default { AddUser, DelUser, Inserir, Login, Profile, LoginAdmin, InserirAdmin, Listar, ListarUser, EditUser, EditarAdmin, ChangePassword };
 

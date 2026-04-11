@@ -108,5 +108,11 @@ async function DelUser(id_user){
   await query(sql, [id_user]);
 }
 
+// Método Atualizar Senha
+async function UpdatePassword(id_user, hashedPassword){
+  let sql = "UPDATE users SET password = $1 WHERE id_user = $2";
+  await query(sql, [hashedPassword, id_user]);
+}
+
 // Exportando os métodos
-export default { AddUser, DelUser, Inserir, ListarByEmail, Profile, ListarByEmailAdmin, InserirAdmin, Listar, ListarUser, EditUser };
+export default { AddUser, DelUser, Inserir, ListarByEmail, Profile, ListarByEmailAdmin, InserirAdmin, Listar, ListarUser, EditUser, UpdatePassword };

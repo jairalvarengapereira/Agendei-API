@@ -46,6 +46,18 @@ async function EditUser(req, res){
   res.status(200).json(updatedUser);
 }
 
+// Método Alterar Senha
+async function ChangePassword(req, res){
+  try {
+    const id_user = req.params.id_user;
+    const { currentPassword, newPassword } = req.body;
+    await serviceUser.ChangePassword(id_user, currentPassword, newPassword);
+    res.status(200).json({ message: "Senha alterada com sucesso!" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+}
+
 // Método Login
 async function Login(req, res){
   const {email, password } = req.body;
@@ -124,4 +136,4 @@ async function DelUser(req, res){
 }
 
 // Métodos relacionados ao nome do médico
-export default { AddUser, DelUser, Login, Profile, InserirAdmin, LoginAdmin, Listar, ListarUser, EditUser, EditarAdmin };
+export default { AddUser, DelUser, Login, Profile, InserirAdmin, LoginAdmin, Listar, ListarUser, EditUser, EditarAdmin, ChangePassword };

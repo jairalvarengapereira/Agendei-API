@@ -30,6 +30,7 @@ router.delete("/users/:id_user", jwt.ValidateToken, controllerUser.DelUser);
 router.get("/users/profile", jwt.ValidateToken, controllerUser.Profile);
 router.get("/users/:id_user", jwt.ValidateToken, controllerUser.ListarUser);
 router.put("/users/:id_user", jwt.ValidateToken, controllerUser.EditUser);
+router.put("/users/:id_user/password", jwt.ValidateToken, controllerUser.ChangePassword);
 
 // Services
 router.get("/services", controllerServices.Listar);
