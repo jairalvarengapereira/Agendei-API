@@ -41,14 +41,10 @@ async function AddUser(
 }
 
 // Método Editar (PUT)
-async function EditUser(name, email, fone, cep, logr, num, compl, bairro, cidade, uf, id_user){
-  if (email) {
-    let sql = `UPDATE users SET name=$1, email=$2, fone=$3, cep=$4, logr=$5, num=$6, compl=$7, bairro=$8, cidade=$9, uf=$10 WHERE id_user = $11`;
-    await query(sql, [name, email, fone, cep, logr, num, compl, bairro, cidade, uf, id_user]);
-  } else {
-    let sql = `UPDATE users SET name=$1, fone=$2, cep=$3, logr=$4, num=$5, compl=$6, bairro=$7, cidade=$8, uf=$9 WHERE id_user = $10`;
-    await query(sql, [name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user]);
-  }
+async function EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user){
+  let sql = `UPDATE users SET name=$1, fone=$2, cep=$3, logr=$4, num=$5, compl=$6, bairro=$7, cidade=$8, uf=$9 WHERE id_user = $10`;
+  await query(sql, [name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user]);
+  return { success: true, id_user };
 }
 
 // Método ListarByEmail

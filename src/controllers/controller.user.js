@@ -40,10 +40,18 @@ async function ListarUser(req, res){
 
 // Metodo Editar User
 async function EditUser(req, res){
-  const id_user = req.params.id_user;
-  const {name, fone, cep, logr, num, compl, bairro, cidade, uf} = req.body;
-  const updatedUser = await serviceUser.EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user);
-  res.status(200).json(updatedUser);
+  try {
+    const id_user = req.params.id_user;
+    const {name, fone, cep, logr, num, compl, bairro, cidade, uf} = req.body;
+    
+    console.log("EditUser recebido:", {name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user});
+    
+    const updatedUser = await serviceUser.EditUser(name, fone, cep, logr, num, compl, bairro, cidade, uf, id_user);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Erro no EditUser:", error);
+    res.status(500).json({ error: error.message });
+  }
 }
 
 // Método Alterar Senha
