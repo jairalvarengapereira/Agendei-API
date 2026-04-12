@@ -46,31 +46,10 @@ async function ListarDoctorsWithAppointments() {
   return await query(sql, []);
 }
 
-  if (dt_start){
-    filter.push(dt_start);
-    sql += `and a.booking_date >= $${paramIndex++} `;
-  }
-
-  if (dt_end){
-    filter.push(dt_end);
-    sql += `and a.booking_date <= $${paramIndex++} `;
-  }
-
-  if (id_doctor){
-    filter.push(id_doctor);
-    sql += `and a.id_doctor = $${paramIndex++} `;
-  }
-
-  sql += `Order by a.booking_date, a.booking_hour`;
-
-  const appointments = await query(sql, filter);
-  return appointments;
-}
-
 // Método Inserir (POST)
 async function Inserir(id_user, id_doctor, id_service, booking_date, booking_hour){
   let sql = `insert into appointments (id_user, id_doctor, id_service, booking_date, booking_hour) 
-                               VALUES ($1, $2, $3, $4, $5) returning id_appointment`;
+                             VALUES ($1, $2, $3, $4, $5) returning id_appointment`;
   const newAppointment = await query(sql, [id_user, id_doctor, id_service, booking_date, booking_hour]);
   return newAppointment[0];
 }
@@ -90,7 +69,7 @@ async function ListarId(id_appointment){
                                   join users    u on u.id_user    = a.id_user
                                   join services s on s.id_service = a.id_service
                             left join doctors_services ds on ds.id_doctor  = a.id_doctor 
-                                                         and ds.id_service = a.id_service
+                                                        and ds.id_service = a.id_service
               where a.id_appointment = $1 `;
 
   const appointments = await query(sql, [id_appointment]);
@@ -110,4 +89,4 @@ async function Editar(id_appointment, id_user, id_doctor, id_service, booking_da
 }
 
 // Exportando os métodos
-export default { Listar, Inserir, Excluir, ListarId, Editar };
+export default { Listar, ListarDoctorsWithAppointments, Inserir, Excluir, ListarId, Editar };
