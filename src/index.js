@@ -7,38 +7,19 @@ dotenv.config();
 
 const app = express();
 
-const whitelist = [
-  'https://agendeiweb.netlify.app',
-  'https://agendei.netlify.app',
-  'http://localhost:5173',
-  'http://localhost:3000'
-];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(null, true);
-    }
-  },
+// CORS - deve ser o primeiro middleware
+app.use(cors({
+  origin: true,
   credentials: true,
-  optionsSuccessStatus: 200
-};
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
+}));
 
-app.use(cors(corsOptions));
+// Preflight para todas as rotas
+app.options('*', cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
-});
 
 app.use(router);
 
