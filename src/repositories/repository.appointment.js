@@ -1,23 +1,50 @@
 import { query } from "../database/postgres.js";
 
-// Método Listar (GET)
-async function Listar(id_user, dt_start, dt_end, id_doctor){
-  let filter = [];
-  let paramIndex = 1;
+// Método Listar
+async function Listar(id_user, dt_start, dt_end, id_doctor) {
+  let sql = `
+    SELECT a.*, u.name as user, d.name as doctor, s.description as service
+    FROM appointments a
+    JOIN users u ON a.id_user = u.id_user
+    JOIN doctors d ON a.id_doctor = d.id_doctor
+    JOIN services s ON a.id_service = s.id_service
+    WHERE 1=1
+  `;
+  let params = [];
 
-  let sql = ` Select a.id_appointment, d.name as doctor, d.specialty, s.description as service, a.id_user,
-                    u.name as user, a.booking_date, a.booking_hour, ds.price, a.id_doctor, a.id_service
-              from appointments a join doctors  d on d.id_doctor  = a.id_doctor
-                                  join users    u on u.id_user    = a.id_user
-                                  join services s on s.id_service = a.id_service
-                            left join doctors_services ds on ds.id_doctor  = a.id_doctor 
-                                                         and ds.id_service = a.id_service
-              where 1 = 1 `;
-
-  if (id_user){
-    filter.push(id_user);
-    sql += `and a.id_user = $${paramIndex++} `;
+  if (id_user > 0) {
+    sql += ` AND a.id_user = $${params.length + 1}`;
+    params.push(id_user);
   }
+  if (id_doctor) {
+    sql += ` AND a.id_doctor = $${params.length + 1}`;
+    params.push(id_doctor);
+  }
+  if (dt_start) {
+    sql += ` AND a.booking_date >= $${params.length + 1}`;
+    params.push(dt_start);
+  }
+  if (dt_end) {
+    sql += ` AND a.booking_date <= $${params.length + 1}`;
+    params.push(dt_end);
+  }
+
+  sql += ` ORDER BY a.booking_date DESC, a.booking_hour DESC`;
+
+  const appointments = await query(sql, params);
+  return appointments;
+}
+
+// Listar médicos que têm agendamentos
+async function ListarDoctorsWithAppointments() {
+  let sql = `
+    SELECT DISTINCT d.id_doctor, d.name, d.specialty
+    FROM doctors d
+    JOIN appointments a ON d.id_doctor = a.id_doctor
+    ORDER BY d.name
+  `;
+  return await query(sql, []);
+}
 
   if (dt_start){
     filter.push(dt_start);

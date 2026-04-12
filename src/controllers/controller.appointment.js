@@ -18,6 +18,12 @@ async function Listar(req, res){
   res.status(200).json(appointments);
 }
 
+// Listar médicos com agendamentos (para filtro)
+async function ListarDoctorsWithAppointments(req, res){
+  const doctors = await serviceAppointment.ListarDoctorsWithAppointments();
+  res.status(200).json(doctors);
+}
+
 // Médoto Inserir
 async function Inserir(req, res){
   const id_user = req.id_user;
@@ -64,4 +70,4 @@ async function EditarAdmin(req, res){
   res.status(200).json(Appointment);
 }
 
-export default {ListarByUser, Listar, Inserir, Excluir, ListarId, InserirAdmin, EditarAdmin }
+export default {ListarByUser, Listar, Inserir, Excluir, ListarId, InserirAdmin, EditarAdmin, ListarDoctorsWithAppointments }

@@ -68,6 +68,11 @@ router.get(
   jwt.ValidateToken,
   controllerAppointment.Listar
 );
+router.get(
+  "/admin/appointments/doctors",
+  jwt.ValidateToken,
+  controllerAppointment.ListarDoctorsWithAppointments
+);
 router.get("/admin/users", jwt.ValidateToken, controllerUser.Listar);
 router.get(
   "/admin/appointments/:id_appointment",

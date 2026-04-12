@@ -6,6 +6,11 @@ async function Listar(id_user, dt_start, dt_end, id_doctor){
   return appointments; 
 }
 
+// Listar médicos com agendamentos
+async function ListarDoctorsWithAppointments(){
+  return await repositoryAppointment.ListarDoctorsWithAppointments();
+}
+
 // Método Inserir
 async function Inserir(id_user, id_doctor, id_service, booking_date, booking_hour){
   
@@ -36,5 +41,5 @@ async function Editar(id_appointment, id_user, id_doctor, id_service, booking_da
 }
 
 // Exportando os Métodos
-export default {Listar, Inserir, Excluir, ListarId, Editar}
+export default {Listar, Inserir, Excluir, ListarId, Editar, ListarDoctorsWithAppointments}
 
